@@ -34,7 +34,7 @@ resource "azurerm_storage_account" "sa_backend" {
   resource_group_name      = azurerm_resource_group.rg_backend.name
   location                 = azurerm_resource_group.rg_backend.location
   account_tier             = "Standard"
-  account_replication_type = "LRS"
+  account_replication_type = "GRS"
 
   tags = {
     environment = "staging"
