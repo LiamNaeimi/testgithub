@@ -3,8 +3,9 @@ name: Deploy Web
 on:
   push:
     paths:
-      - testgithub/github/staticwebsite/**
-
+      - '.github/workflows/main.yml'
+      - 'staticwebsite/**'  # Alle endringer i staticwebsite-mappen
+      - 'web-demo/**' 
   workflow_dispatch: # Tillater manuell kjøring av workflow
 
 jobs:
