@@ -13,9 +13,13 @@ terraform {
     resource_group_name  = "rg-backend-tfstate07"
     storage_account_name = "newsabetfstatevpmba2"
     container_name       = "new-tfstate07"
-    key                  = "newterraform.tfstate-07"
+    key                  = "web-demo1.terraform.tfstate-07"
   }
 }
 provider "azurerm" {
-  features {}
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
 }
