@@ -3,22 +3,20 @@ name: Deploy Web
 on:
   push:
     paths:
-      - '.github/workflows/main.yml'
-      - 'staticwebsite/**'  # Alle endringer i staticwebsite-mappen
-      - 'web-demo/**' 
-  workflow_dispatch: # Tillater manuell kjøring av workflow
+      - .github/workflows/main.yml
+  workflow_dispatch:
 
 jobs:
   resourcegroups:
     runs-on: ubuntu-latest
     name: 'Deploy Static Website'
 
-    env: # Miljøvariabler som brukes i jobben
+    env:
       ARM_CLIENT_ID: ${{ secrets.AZURECLIENTID }}
       ARM_CLIENT_SECRET: ${{ secrets.MYSECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTIONID }}
       ARM_TENANT_ID: ${{ secrets.TENANTID }}
-      WORKING_DIR: ./testgithub/github/staticwebsite # Angi arbeidskatalogen hvor Terraform-filer finnes
+      WORKING_DIR: testgithub/github/staticwebsite  # Oppdater til korrekt sti
 
     steps:
       - name: Check out repository
@@ -27,10 +25,13 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.5.6 # Angi ønsket Terraform-versjon
+          terraform_version: 1.5.6
+
+      - name: List files in the working directory
+        run: ls -alh ${{ env.WORKING_DIR }}
 
       - name: Terraform Init
-        id: init 
+        id: init
         working-directory: ${{ env.WORKING_DIR }}
         run: terraform init
 
