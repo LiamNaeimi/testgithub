@@ -3,9 +3,10 @@ name: Deploy Web
 on:
   push:
     paths:
-      - .github/workflows/main.yml
-  workflow_dispatch:
-
+       - .github/workflows/main.yml
+      - main.tf
+      - providers.tf
+  workflow_dispatch: 
 jobs:
   resourcegroups:
     runs-on: ubuntu-latest
