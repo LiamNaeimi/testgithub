@@ -10,7 +10,7 @@ terraform {
     resource_group_name  = "rg-backend-tfstate07"
     storage_account_name = "newsabetfstatevpmba2"
     container_name       = "new-tfstate07"
-    key                  = "web-demo1.terraform.tfstate-07"
+    key                  = "terraform.tfsatete"
   }
 }
 
