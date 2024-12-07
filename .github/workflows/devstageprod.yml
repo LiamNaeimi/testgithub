@@ -1,0 +1,65 @@
+name: Terraform CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/*
+      - '**/*.tf'
+workflow_dispatch:
+
+
+     env:
+      ARM_CLIENT_ID: ${{ secrets.AZURECLIENTID }}
+      ARM_CLIENT_SECRET: ${{ secrets.MYSECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTIONID }}
+      ARM_TENANT_ID: ${{ secrets.TENANTID }}
+      WORKING_DIR: ./staticwebsite  # Juster om nødvendig
+jobs:
+ dev_stage:
+ runs_on: ubuntu-latest
+ 
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.6
+
+      - name: List repository files
+        run: ls -alh
+
+      - name: Terraform Init
+        id: init
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terraform init
+      - name: Terraform workspace select or create dev
+        run: terraform workspace select dev || terraform select new dev
+        working-directory: ${{env.WORKING_DIR}}
+
+      - name: terraform apply dev
+        run: terraform apply -auto-approve
+        working-directory: ${{env.WORKING_DIR}}
+
+      - name: Test dev
+        run: curl {terraform output -raw primary_web_ednpoint}
+        working-direcroty: ${{ env.WORKING_DIR }}
+stage_prod:
+      needs: dev_stage
+      runs-on: ubuntu-latest 
+      steps:
+      -name: Checkout
+      uses: Actions/checkout@v3
+      - name: Terraform Plan
+        id: plan
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        id: apply
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terraform apply -auto-approve tfplan
