@@ -5,11 +5,9 @@ on:
     branches:
       - main
     paths:
-      - .github/workflows/main.yml
-      - main.tf
-      - providers.tf
-    types: 
-       - completed
+      - .github/workflows/*
+      - '**/*.tf'
+
 jobs:
   resourcegroups:
     runs-on: ubuntu-latest
@@ -20,7 +18,7 @@ jobs:
       ARM_CLIENT_SECRET: ${{ secrets.MYSECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTIONID }}
       ARM_TENANT_ID: ${{ secrets.TENANTID }}
-      WORKING_DIR: ./staticwebsite # Oppdater til korrekt sti
+      WORKING_DIR: ./staticwebsite  # Juster om nødvendig
 
     steps:
       - name: Check out repository
@@ -31,8 +29,8 @@ jobs:
         with:
           terraform_version: 1.5.6
 
-      - name: List files in the working directory
-        run: ls -alh ${{ env.WORKING_DIR }}
+      - name: List repository files
+        run: ls -alh
 
       - name: Terraform Init
         id: init
@@ -45,6 +43,6 @@ jobs:
         run: terraform plan -out=tfplan
 
       - name: Terraform Apply
-        id: Apply
+        id: apply
         working-directory: ${{ env.WORKING_DIR }}
         run: terraform apply -auto-approve tfplan
