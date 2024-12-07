@@ -2,11 +2,12 @@ name: Deploy Web
 
 on:
   push:
+    branches:
+      - main
     paths:
-       - .github/workflows/main.yml
+      - .github/workflows/main.yml
       - main.tf
       - providers.tf
-  workflow_dispatch: 
 jobs:
   resourcegroups:
     runs-on: ubuntu-latest
