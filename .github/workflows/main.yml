@@ -16,7 +16,7 @@ jobs:
       ARM_CLIENT_SECRET: ${{ secrets.MYSECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTIONID }}
       ARM_TENANT_ID: ${{ secrets.TENANTID }}
-      WORKING_DIR: testgithub/github/staticwebsite  # Oppdater til korrekt sti
+      WORKING_DIR: ./staticwebsite # Oppdater til korrekt sti
 
     steps:
       - name: Check out repository
