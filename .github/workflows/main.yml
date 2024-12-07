@@ -8,6 +8,8 @@ on:
       - .github/workflows/main.yml
       - main.tf
       - providers.tf
+    types: 
+       - completed
 jobs:
   resourcegroups:
     runs-on: ubuntu-latest
