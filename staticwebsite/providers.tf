@@ -1,4 +1,3 @@
-
 terraform {
   required_providers {
     azurerm = {
@@ -6,9 +5,7 @@ terraform {
       version = "4.12.0"
     }
   }
-}
 
-terraform {
   backend "azurerm" {
     resource_group_name  = "rg-backend-tfstate07"
     storage_account_name = "newsabetfstatevpmba2"
@@ -16,6 +13,7 @@ terraform {
     key                  = "web-demo1.terraform.tfstate-07"
   }
 }
+
 provider "azurerm" {
   features {
     resource_group {
