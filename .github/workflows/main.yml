@@ -1,0 +1,41 @@
+name: Deploy Web
+
+on:
+  push:
+    paths:
+      - testgithub/github/staticwebsite/**
+
+  workflow_dispatch: # Tillater manuell kjøring av workflow
+
+jobs:
+  resourcegroups:
+    runs-on: ubuntu-latest
+    name: 'Deploy Static Website'
+
+    env: # Miljøvariabler som brukes i jobben
+      ARM_CLIENT_ID: ${{ secrets.AZURECLIENTID }}
+      ARM_CLIENT_SECRET: ${{ secrets.MYSECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTIONID }}
+      ARM_TENANT_ID: ${{ secrets.TENANTID }}
+      WORKING_DIR: ./testgithub/github/staticwebsite # Angi arbeidskatalogen hvor Terraform-filer finnes
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.6 # Angi ønsket Terraform-versjon
+
+      - name: Terraform Init
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terraform init
+
+      - name: Terraform Plan
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terraform apply -auto-approve tfplan
