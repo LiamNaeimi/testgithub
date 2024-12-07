@@ -7,7 +7,12 @@ on:
     paths:
       - .github/workflows/*
       - '**/*.tf'
-
+workflow_dispatch:
+inputs:
+ action_type: 
+ desription:  "WHat action should be preformed"
+ required: true
+ default: 'apply'
 jobs:
   resourcegroups:
     runs-on: ubuntu-latest
